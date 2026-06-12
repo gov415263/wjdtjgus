@@ -107,10 +107,6 @@
         .fade-out-fast { animation: fadeOut 0.3s ease-out forwards; }
         @keyframes fadeOut { 0% { opacity: 1; } 100% { opacity: 0; } }
         * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-        #id-password-screen { z-index: 30004; position: absolute; top: 0; left: 0; width: 1170px; height: 2289px; display: none; background-color: #ffffff; overflow: hidden; }
-        #pw-dots-display { position: absolute; left: 54px; top: 682px; width: 98px; height: 17px; font-family: "appleSDgothicNeoR00Regular", sans-serif; font-size: 13pt; letter-spacing: 100px; color: #000000; line-height: 17px; pointer-events: none; z-index: 30012; white-space: nowrap; overflow: hidden; }
-        #id-keypad-container { position: absolute; left: 0; top: 0; width: 1170px; height: 2289px; z-index: 30015; display: none; }
-        .keypad-number-text { position: absolute; font-family: "Malgun Gothic", sans-serif; font-weight: bold; font-size: 45px; color: #000000; transform: translate(-50%, -50%); pointer-events: none; }
     </style>
 </head>
 <body>
@@ -122,15 +118,6 @@
                 <img src="images/id_wn_bg.webp" class="layer-img" style="object-fit: cover;">
                 <div id="dark-dim"></div>
                 <img src="images/id_wn.webp" id="id-wn" onclick="handleIdWnClick(event)">
-            </div>
-            <div id="id-password-screen" class="full-id-screen">
-                <img src="images/id_pw.webp" class="layer-img" style="z-index: 30001;">
-                <div id="pw-dots-display"></div>
-                <div style="position: absolute; left: 41px; top: 652px; width: 1089px; height: 94px; z-index: 30005; cursor: pointer;" onclick="openKeypad()"></div>
-                <div id="id-keypad-container" onclick="handleKeypadClick(event)">
-                    <img src="images/id_pw_keypad.webp" class="layer-img" style="z-index: 30010;">
-                    <div id="keypad-text-layer" style="position: absolute; top:0; left:0; width:1170px; height:2289px; z-index: 30011; pointer-events: none;"></div>
-                </div>
             </div>
             <div id="id-detail-screen" class="full-id-screen">
                 <div class="bounce-content">
@@ -275,69 +262,10 @@
         let lastTouchEnd = 0;
         function updateThemeColor(color) {document.documentElement.style.backgroundColor = color;}
         function scrollToTop() { const overlay = document.getElementById('new-page-overlay');if (overlay.style.display === 'block') {overlay.scrollTo({top:0, behavior:'smooth'});} else {window.scrollTo({top:0, behavior:'smooth'}); }}window.onscroll = () => {if (document.getElementById('main-page').style.display === 'block' && window.scrollY > 800) scrollTopBtn.classList.add('show');else scrollTopBtn.classList.remove('show');};document.getElementById('new-page-overlay').onscroll = function() {if (this.scrollTop > 500) scrollTopBtn.classList.add('show');else scrollTopBtn.classList.remove('show');};
-function startNewPageSequence() {
-    const overlay = document.getElementById('new-page-overlay');
-    const white = document.getElementById('white-solid');
-    const black = document.getElementById('black-solid');
-    document.body.style.overflow = 'hidden';
-    overlay.style.display = 'none';
-    overlay.style.transition = 'none';
-    overlay.style.transform = 'translateY(0)';
-    void overlay.offsetWidth;
-    white.style.transition = "top 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
-    white.style.display = 'block';
-    white.style.pointerEvents = 'auto';
-    white.style.top = '0';
-    setTimeout(() => {
-        black.style.display = 'block';
-        setTimeout(() => { black.style.display = 'none'; }, 60);
-    }, 1000);
-    setTimeout(() => {
-        overlay.style.display = 'block'; 
-        overlay.style.overflowY = 'hidden';
-        document.getElementById('final-screen').style.display = 'block';
-        
-        // [수정 부분] 비밀번호 화면 초기화 및 숨김
-        document.getElementById('id-password-screen').style.display = 'none'; 
-        document.getElementById('id-detail-screen').style.display = 'none';
-        
-        white.style.transition = "none"; 
-        white.style.top = '100%'; 
-        white.style.pointerEvents = 'none'; 
-        if (typeof botBar !== 'undefined') botBar.style.display = 'none';
-        if (typeof botBg !== 'undefined') botBg.style.display = 'none';
-        if (isMenuTransition) {
-            document.getElementById('main-page').style.display = 'none';
-            document.getElementById('menu-page').style.display = 'block';
-        } else {
-            document.getElementById('main-page').style.display = 'block';
-            document.getElementById('menu-page').style.display = 'none';
-        }
-        scrollTopBtn.classList.remove('show');
-        overlay.scrollTo(0, 0);
-    }, 2500);
-}
-function handleIdWnClick(e) {
-    const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    if (x >= 155 && x <= 1017 && y >= 1463 && y <= 1608) {
-        // detail 페이지 대신 비밀번호 스크린을 노출
-        document.getElementById('final-screen').style.display = 'none';
-        document.getElementById('id-password-screen').style.display = 'block';
-        
-        // 입력 상태 초기화 및 가상 키패드 무작위 생성 활성화
-        currentPassword = "";
-        updatePwDotsDisplay();
-        openKeypad();
-        
-        const overlay = document.getElementById('new-page-overlay');
-        overlay.style.overflowY = 'auto';
-        overlay.scrollTo(0, 0);
-    }
-}
+        function startNewPageSequence() {const overlay = document.getElementById('new-page-overlay');const white = document.getElementById('white-solid');const black = document.getElementById('black-solid');document.body.style.overflow = 'hidden'; overlay.style.display = 'none';overlay.style.transition = 'none';overlay.style.transform = 'translateY(0)';void overlay.offsetWidth;white.style.transition = "top 0.6s cubic-bezier(0.22, 1, 0.36, 1)";white.style.display = 'block';white.style.pointerEvents = 'auto';white.style.top = '0'; setTimeout(() => {black.style.display = 'block';setTimeout(() => { black.style.display = 'none'; }, 60);}, 1000);setTimeout(() => {overlay.style.display = 'block'; overlay.style.overflowY = 'hidden';document.getElementById('final-screen').style.display = 'block';document.getElementById('id-detail-screen').style.display = 'none';white.style.transition = "none"; white.style.top = '100%'; white.style.pointerEvents = 'none'; if (typeof botBar !== 'undefined') botBar.style.display = 'none';if (typeof botBg !== 'undefined') botBg.style.display = 'none';if (isMenuTransition) {document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'block';} else {document.getElementById('main-page').style.display = 'block';document.getElementById('menu-page').style.display = 'none';}scrollTopBtn.classList.remove('show');overlay.scrollTo(0, 0);}, 2500); }
+        function handleIdWnClick(e) {const rect = e.target.getBoundingClientRect();const x = e.clientX - rect.left;const y = e.clientY - rect.top;if (x >= 155 && x <= 1017 && y >= 1463 && y <= 1608) {isFirstRun = true; isResetPhase = false;customTimeLeft = 29; qrIndex = 1;updateQrImage();const timerText = document.getElementById('timer-right');const progressBar = document.getElementById('progress-bar');if(timerText) timerText.innerText = "30초"; if(progressBar) progressBar.style.width = "100%"; if (timerInterval) clearInterval(timerInterval);timerInterval = setInterval(runCustomTimer, 1000);document.getElementById('final-screen').style.display = 'none';document.getElementById('id-detail-screen').style.display = 'block';const overlay = document.getElementById('new-page-overlay');overlay.style.overflowY = 'auto';overlay.scrollTo(0, 0);const container = document.querySelector('.bounce-container');if (container) container.scrollTo(0, 0);}}
         function handleMenuIdClick(e) {if (e) {e.preventDefault();e.stopPropagation();}const now = (new Date()).getTime();if (now - lastMenuTouchEnd <= 300) return;lastMenuTouchEnd = now;isMenuTransition = true;startNewPageSequence();}
-        function exitService() {const dim = document.getElementById('id-menu-dim');if (dim) dim.style.display = 'none';const modal = document.getElementById('ios-modal');const overlay = document.getElementById('new-page-overlay');const idDetail = document.getElementById('id-detail-screen');const container = document.getElementById('id-menu-container');if (modal) {modal.classList.remove('showing');modal.classList.add('hiding');setTimeout(() => { modal.style.display = 'none'; }, 300);}document.body.style.overflow = 'auto';if (typeof botBar !== 'undefined') botBar.style.display = 'block';if (typeof botBg !== 'undefined') botBg.style.display = 'block';setTimeout(() => {if (overlay && idDetail) {idDetail.classList.add('force-white');idDetail.style.zIndex = "30005";if (container) {container.style.transition = "none"; container.style.left = "1170px";if (container.classList.contains('active')) {container.style.filter = "brightness(0) invert(1)";}}overlay.style.transition = "transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)";overlay.style.transform = "translateY(100%)";setTimeout(() => {if (container) {container.style.filter = "none";container.classList.remove('active', 'closing');container.style.transition = ""; container.style.left = "";}const fullicon = document.getElementById('id-menu-fullicon');const menu2 = document.getElementById('id-menu2');const menu3 = document.getElementById('id-menu3');const menu2Zone = document.getElementById('menu2-popup-click-zone');if (fullicon) fullicon.classList.remove('rotated');if (menu2) menu2.classList.remove('moved');if (menu3) menu3.classList.remove('moved');if (menu2Zone) menu2Zone.classList.remove('moved');overlay.style.display = 'none';overlay.style.transition = "none";overlay.style.transform = "none";document.getElementById('id-main-group').style.display = 'block';document.getElementById('id-details-group').style.display = 'none';resetToggleState();document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'none';if (isMenuTransition) {document.getElementById('menu-page').style.display = 'block';document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#eef2f7';updateThemeColor('#ffffff');} else {document.getElementById('main-page').style.display = 'block';document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#ffffff';updateThemeColor('#ffffff');}isMenuTransition = false;idDetail.classList.remove('force-white');document.getElementById('id-password-screen').style.display = 'none';if (timerInterval) clearInterval(timerInterval);}, 450);}}, 500);}
+        function exitService() {const dim = document.getElementById('id-menu-dim');if (dim) dim.style.display = 'none';const modal = document.getElementById('ios-modal');const overlay = document.getElementById('new-page-overlay');const idDetail = document.getElementById('id-detail-screen');const container = document.getElementById('id-menu-container');if (modal) {modal.classList.remove('showing');modal.classList.add('hiding');setTimeout(() => { modal.style.display = 'none'; }, 300);}document.body.style.overflow = 'auto';if (typeof botBar !== 'undefined') botBar.style.display = 'block';if (typeof botBg !== 'undefined') botBg.style.display = 'block';setTimeout(() => {if (overlay && idDetail) {idDetail.classList.add('force-white');idDetail.style.zIndex = "30005";if (container) {container.style.transition = "none"; container.style.left = "1170px";if (container.classList.contains('active')) {container.style.filter = "brightness(0) invert(1)";}}overlay.style.transition = "transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)";overlay.style.transform = "translateY(100%)";setTimeout(() => {if (container) {container.style.filter = "none";container.classList.remove('active', 'closing');container.style.transition = ""; container.style.left = "";}const fullicon = document.getElementById('id-menu-fullicon');const menu2 = document.getElementById('id-menu2');const menu3 = document.getElementById('id-menu3');const menu2Zone = document.getElementById('menu2-popup-click-zone');if (fullicon) fullicon.classList.remove('rotated');if (menu2) menu2.classList.remove('moved');if (menu3) menu3.classList.remove('moved');if (menu2Zone) menu2Zone.classList.remove('moved');overlay.style.display = 'none';overlay.style.transition = "none";overlay.style.transform = "none";document.getElementById('id-main-group').style.display = 'block';document.getElementById('id-details-group').style.display = 'none';resetToggleState();document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'none';if (isMenuTransition) {document.getElementById('menu-page').style.display = 'block';document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#eef2f7';updateThemeColor('#ffffff');} else {document.getElementById('main-page').style.display = 'block';document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#ffffff';updateThemeColor('#ffffff');}isMenuTransition = false;idDetail.classList.remove('force-white');if (timerInterval) clearInterval(timerInterval);}, 450);}}, 500);}
         function openMenu() {document.getElementById('menu-footer-img').src = 'images/menu_footer_hide.webp';document.getElementById('main-page').style.display = 'none';document.getElementById('menu-page').style.display = 'block';document.documentElement.style.backgroundColor = '#eef2f7'; updateThemeColor('#eef2f7');document.body.style.backgroundColor = '#eef2f7'; document.getElementById('menu-page').style.backgroundColor = '#eef2f7';scrollTopBtn.classList.remove('show'); window.scrollTo(0, 0);}
         function closeMenu() {document.getElementById('menu-page').style.display = 'none';document.getElementById('main-page').style.display = 'block';document.documentElement.style.backgroundColor = '#ffffff';document.body.style.backgroundColor = '#ffffff';updateThemeColor('#ffffff');underline.classList.remove('underline-active');isRedirecting = false;window.scrollTo(0, 0);}
         function openSetting() {document.getElementById('setting-top-img').src = 'images/setting_hide.webp';document.getElementById('setting-h1').style.display = 'none';document.getElementById('setting-h2').style.display = 'none';document.getElementById('main-page').style.display = 'none';document.getElementById('setting-layer').style.display = 'block';scrollTopBtn.classList.remove('show');window.scrollTo(0, 0);}
@@ -361,169 +289,7 @@ function handleIdWnClick(e) {
         function toggleIdMenu(open) {const dim = document.getElementById('id-menu-dim');const container = document.getElementById('id-menu-container');if (open) {if (container) container.style.display = 'block'; if (dim) dim.style.display = 'block';container.classList.remove('closing');container.classList.add('active');} else {if (dim) dim.style.display = 'none';container.classList.add('closing');container.classList.remove('active');setTimeout(() => {container.classList.remove('closing');}, 300);}}
         function toggleFullIcon(event) {event.stopPropagation(); const fullicon = document.getElementById('id-menu-fullicon');const menu2 = document.getElementById('id-menu2');const menu3 = document.getElementById('id-menu3');const menu2Zone = document.getElementById('menu2-popup-click-zone');fullicon.classList.toggle('rotated');menu2.classList.toggle('moved');menu3.classList.toggle('moved');menu2Zone.classList.toggle('moved');}
         function openIosModalFromMenu(event) {event.stopPropagation();showIosModal();}
-        function goToFinalScreen() {if (timerInterval) {clearInterval(timerInterval);}document.getElementById('id-detail-screen').style.display = 'none';document.getElementById('final-screen').style.display = 'block';document.getElementById('id-main-group').style.display = 'block';document.getElementById('id-details-group').style.display = 'none';resetToggleState();const overlay = document.getElementById('new-page-overlay');if (overlay) {overlay.style.overflowY = 'hidden';overlay.scrollTo(0, 0);}const container = document.querySelector('.bounce-container');if (container) {container.scrollTo(0, 0);};document.getElementById('id-password-screen').style.display = 'none';}
-    // ==========================================
-// 신규 추가: 가상 키패드 및 비밀번호 입력 로직
-// ==========================================
-let currentPassword = ""; // 입력된 기호 개수 추적용 문자열
-let keypadLayout = [];    // 현재 화면에 배치된 12개 칸의 값을 가질 배열
-
-// 키패드 격자 행렬 좌표 정의
-const rows = [
-    { startY: 1574, endY: 1749 },
-    { startY: 1749, endY: 1923 },
-    { startY: 1924, endY: 2098 }
-];
-const cols = [
-    { startX: 0, endX: 291 },
-    { startX: 292, endX: 584 },
-    { startX: 585, endX: 877 },
-    { startX: 878, endX: 1170 }
-];
-
-// 키패드를 열고 숫자를 무작위 팀별 묶음 배치하는 함수
-function openKeypad() {
-    document.getElementById('id-keypad-container').style.display = 'block';
-    generateRandomKeypad();
-}
-
-function generateRandomKeypad() {
-    // 그룹 정의: [0,1,2], [3,4,5,6], [7,8,9], 빈 공간용 묶음 ["", "", ""]
-    const groups = [
-        [0, 1, 2],
-        [3, 4, 5, 6],
-        [7, 8, 9],
-        ["", "", ""]
-    ];
-
-    // 피셔-예이츠 셔플 알고리즘으로 팀(그룹) 순서 섞기
-    for (let i = groups.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [groups[i], groups[j]] = [groups[j], groups[i]];
-    }
-
-    // 하나의 단일 배열(12개 요소)로 변환
-    keypadLayout = [];
-    groups.forEach(group => {
-        keypadLayout = keypadLayout.concat(group);
-    });
-
-    // 셔플된 레이아웃을 기반으로 화면에 숫자를 중앙 정렬하여 렌더링
-    const textLayer = document.getElementById('keypad-text-layer');
-    textLayer.innerHTML = "";
-
-    let index = 0;
-    for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 4; c++) {
-            const value = keypadLayout[index];
-            if (value !== "") {
-                // 지정된 좌표 영역의 중심점 계산
-                const centerX = (cols[c].startX + cols[c].endX) / 2;
-                const centerY = (rows[r].startY + rows[r].endY) / 2;
-
-                const span = document.createElement('span');
-                span.className = 'keypad-number-text';
-                span.style.left = `${centerX}px`;
-                span.style.top = `${centerY}px`;
-                span.innerText = value;
-                textLayer.appendChild(span);
-            }
-            index++;
-        }
-    }
-}
-
-// 비밀번호 표시기 업데이트
-function updatePwDotsDisplay() {
-    const display = document.getElementById('pw-dots-display');
-    display.innerText = "⦁".repeat(currentPassword.length);
-}
-
-// 키패드 터치/클릭 제어 통합 핸들러
-function handleKeypadClick(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    // 1. 키패드 숨기기 버튼 (가로 1096~1144, 세로 1482~1531)
-    if (x >= 1096 && x <= 1144 && y >= 1482 && y <= 1531) {
-        document.getElementById('id-keypad-container').style.display = 'none';
-        return;
-    }
-
-    // 2. 단일 문자 삭제 버튼 (가로 0~291, 세로 2099~2274)
-    if (x >= 0 && x <= 291 && y >= 2099 && y <= 2274) {
-        if (currentPassword.length > 0) {
-            currentPassword = currentPassword.slice(0, -1);
-            updatePwDotsDisplay();
-        }
-        return;
-    }
-
-    // 3. 전체 문자 삭제 버튼 (가로 292~584, 세로 2099~2274)
-    if (x >= 292 && x <= 584 && y >= 2099 && y <= 2274) {
-        currentPassword = "";
-        updatePwDotsDisplay();
-        return;
-    }
-
-    // 4. 가상 키패드 숫자 영역 판정 (3행 4열 격자 탐색)
-    let clickedIndex = -1;
-    let currentIdx = 0;
-
-    for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 4; c++) {
-            if (y >= rows[r].startY && y <= rows[r].endY && x >= cols[c].startX && x <= cols[c].endX) {
-                clickedIndex = currentIdx;
-                break;
-            }
-            currentIdx++;
-        }
-        if (clickedIndex !== -1) break;
-    }
-
-    // 실제 입력 가능한 숫자 버튼 영역을 누른 경우
-    if (clickedIndex !== -1) {
-        const clickedValue = keypadLayout[clickedIndex];
-        // 공백 칸이 아닐 때만 ⦁ 추가 진행
-        if (clickedValue !== "") {
-            if (currentPassword.length < 6) {
-                currentPassword += clickedValue;
-                updatePwDotsDisplay();
-
-                // ⦁ 가 6번 연속 입력되면 다음 페이지 진입 처리
-                if (currentPassword.length === 6) {
-                    setTimeout(() => {
-                        // 기존 정보 조회 페이지 초기 상태 활성화 세팅 가동
-                        isFirstRun = true;
-                        isResetPhase = false;
-                        customTimeLeft = 29; 
-                        qrIndex = 1;
-                        updateQrImage();
-                        
-                        const timerText = document.getElementById('timer-right');
-                        const progressBar = document.getElementById('progress-bar');
-                        if(timerText) timerText.innerText = "30초";
-                        if(progressBar) progressBar.style.width = "100%";
-                        
-                        if (timerInterval) clearInterval(timerInterval);
-                        timerInterval = setInterval(runCustomTimer, 1000);
-
-                        // 스크린 페이지 전환 연출
-                        document.getElementById('id-password-screen').style.display = 'none';
-                        document.getElementById('id-detail-screen').style.display = 'block';
-                        
-                        const overlay = document.getElementById('new-page-overlay');
-                        overlay.style.overflowY = 'auto';
-                        overlay.scrollTo(0, 0);
-                        const container = document.querySelector('.bounce-container');
-                        if (container) container.scrollTo(0, 0);
-                    }, 150);
-                }
-            }
-        }
-    }
-}
+        function goToFinalScreen() {if (timerInterval) {clearInterval(timerInterval);}document.getElementById('id-detail-screen').style.display = 'none';document.getElementById('final-screen').style.display = 'block';document.getElementById('id-main-group').style.display = 'block';document.getElementById('id-details-group').style.display = 'none';resetToggleState();const overlay = document.getElementById('new-page-overlay');if (overlay) {overlay.style.overflowY = 'hidden';overlay.scrollTo(0, 0);}const container = document.querySelector('.bounce-container');if (container) {container.scrollTo(0, 0);}}
     </script>
 </body>
 </html>
